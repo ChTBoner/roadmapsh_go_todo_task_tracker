@@ -22,7 +22,7 @@ type (
 const filename = "task.json"
 
 func NewTask(description string, date time.Time) {
-	tasks := ParseTasks()
+	tasks := ParseTasksFile()
 	task := Task{
 		// Id:          1,
 		Description: description,
@@ -35,7 +35,7 @@ func NewTask(description string, date time.Time) {
 	fmt.Printf("Added task: %s | Time: %s\n", task.Description, task.CreatedAt)
 }
 
-func ParseTasks() Tasks {
+func ParseTasksFile() Tasks {
 	var tasks Tasks
 	content, err := os.ReadFile(filename)
 	if os.IsNotExist(err) {
@@ -60,4 +60,8 @@ func WriteTasks(tasks Tasks) {
 		log.Fatalf("Error Marshalling: %s", err)
 	}
 	fmt.Println(string(bytes))
+	err = os.WriteFile(filename, bytes, 0644)
+	if err != nil {
+		log.Fatalf("Could not write to file: err")
+	}
 }

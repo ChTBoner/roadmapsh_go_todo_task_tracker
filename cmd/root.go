@@ -52,7 +52,7 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.AddCommand(addCmd)
-	// rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(listCmd)
 	// rootCmd.AddCommand(updateCmd)
 	// rootCmd.AddCommand(deleteCmd)
 	currentTime = time.Now()
@@ -78,7 +78,9 @@ var listCmd = &cobra.Command{
 	Short: "Lists all task",
 	Long:  "Lists all task. Usage: ./task_tracker list",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list command")
+		for index, tk := range task.ParseTasksFile() {
+			fmt.Printf("%d - %s - %s\n", index, tk.Status, tk.Description)
+		}
 	},
 }
 
