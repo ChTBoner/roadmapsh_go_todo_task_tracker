@@ -1,7 +1,10 @@
+/*
+Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
-import "fmt"
+import "task_tracker/cmd"
 
 func main() {
-	fmt.Println("Test")
+	cmd.Execute()
 }
