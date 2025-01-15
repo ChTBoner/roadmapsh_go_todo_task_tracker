@@ -6,9 +6,13 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"task_tracker/task"
+	"time"
 
 	"github.com/spf13/cobra"
 )
+
+var currentTime time.Time
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -45,17 +49,20 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.AddCommand(addCmd)
-	rootCmd.AddCommand(listCmd)
-	rootCmd.AddCommand(updateCmd)
-	rootCmd.AddCommand(deleteCmd)
+	// rootCmd.AddCommand(listCmd)
+	// rootCmd.AddCommand(updateCmd)
+	// rootCmd.AddCommand(deleteCmd)
+	currentTime = time.Now()
 }
 
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Adds a task",
 	Long:  "Adds a task. Usage: ./task_tracker add \"task name\"",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Add command")
+		task := task.NewTask(args[0], currentTime)
+		fmt.Printf("Added task: %s | Time: %s\n", task.Description, task.CreatedAt)
 	},
 }
 
