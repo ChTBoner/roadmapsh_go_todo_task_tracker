@@ -12,7 +12,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var currentTime time.Time
+var (
+	currentTime time.Time
+	tasks       task.Tasks
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -53,6 +56,10 @@ func init() {
 	// rootCmd.AddCommand(updateCmd)
 	// rootCmd.AddCommand(deleteCmd)
 	currentTime = time.Now()
+
+	for _, tk := range tasks {
+		fmt.Println(tk)
+	}
 }
 
 var addCmd = &cobra.Command{
@@ -61,8 +68,7 @@ var addCmd = &cobra.Command{
 	Long:  "Adds a task. Usage: ./task_tracker add \"task name\"",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		task := task.NewTask(args[0], currentTime)
-		fmt.Printf("Added task: %s | Time: %s\n", task.Description, task.CreatedAt)
+		task.NewTask(args[0], currentTime)
 	},
 }
 
