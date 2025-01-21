@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 	"task_tracker/task"
 	"time"
 
@@ -53,7 +55,7 @@ func init() {
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(listCmd)
-	// rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(updateCmd)
 	// rootCmd.AddCommand(deleteCmd)
 	currentTime = time.Now()
 
@@ -86,10 +88,29 @@ var listCmd = &cobra.Command{
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
+	Args:  cobra.ExactArgs(2),
 	Short: "Updates a task",
 	Long:  "Updates a task. Usage: ./task_tracker update 1 \"call doctor\"",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Add command")
+		tasks := task.ParseTasksFile()
+		task_index, err := strconv.Atoi(args[0])
+		if err != nil {
+			log.Fatalf("Error parsing index argument: err")
+		}
+
+		// check task index
+		if task_index+1 > len(tasks) {
+			log.Fatalln("Index out of range")
+		}
+
+		// update description
+		updated_task := &tasks[task_index]
+		updated_task.Description = args[1]
+		updated_task.UpdatedAt = currentTime
+		fmt.Printf("Description updated to: %s\n", updated_task.Description)
+		fmt.Printf("Description updated on: %s\n", updated_task.UpdatedAt)
+
+		task.WriteTasks(tasks)
 	},
 }
 
